@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>船長帶路-智慧平台 | 港灣營運中控台</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="ops-shell">
+      <header class="masthead">
+        <div class="masthead-copy">
+          <p class="eyebrow">Keelung Harbor Ops / Demo Console</p>
+          <h1>船長帶路-智慧平台</h1>
+          <p class="lead">把航線、船長排班、旅客預約與地方店家導流，收束成一張可操作的港灣營運海圖。</p>
+          <div class="source-strip" aria-label="比賽來源">
+            <span>比賽來源：114 創業歸故里驗證輔導計畫</span>
+            <span>創業驗證組成果評選分級獎勵名單 / 實踐級 / 基隆市 / 囍集有限公司</span>
+            <a href="https://sccontest.tca.org.tw/content/display#sectionA" target="_blank" rel="noreferrer">官方來源</a>
+          </div>
+        </div>
+        <div class="masthead-board" aria-label="今日營運摘要">
+          <div>
+            <span>可售名額</span>
+            <strong id="seatCount">0</strong>
+          </div>
+          <div>
+            <span>待處理需求</span>
+            <strong id="queueCount">0</strong>
+          </div>
+          <div>
+            <span>港況</span>
+            <strong id="weatherState">穩定</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="signal-bar" aria-label="港灣篩選控制">
+        <div class="filter-group" role="list" aria-label="航線主題">
+          <button class="active" type="button" data-filter="all">全部航線</button>
+          <button type="button" data-filter="sunset">夕照航線</button>
+          <button type="button" data-filter="culture">港史導覽</button>
+          <button type="button" data-filter="food">漁市食旅</button>
+          <button type="button" data-filter="waitlist">候補警戒</button>
+        </div>
+        <label class="tide-control">
+          <span>潮汐視窗</span>
+          <input id="tideRange" type="range" min="0" max="100" value="62">
+          <strong id="tideLabel">漲潮 62%</strong>
+        </label>
+      </section>
+
+      <section class="control-grid">
+        <section class="chart-panel">
+          <div class="panel-head">
+            <div>
+              <p>Route chart</p>
+              <h2>航線/行程海圖</h2>
+            </div>
+            <button id="optimize" class="action-button" type="button">重排靠泊序</button>
+          </div>
+
+          <div class="harbor-chart" aria-label="互動航線海圖">
+            <svg viewBox="0 0 680 360" role="img" aria-labelledby="chartTitle chartDesc">
+              <title id="chartTitle">基隆港灣航線示意圖</title>
+              <desc id="chartDesc">點選航線標記可切換目前營運焦點。</desc>
+              <defs>
+                <pattern id="chartGrid" width="34" height="34" patternUnits="userSpaceOnUse">
+                  <path d="M 34 0 L 0 0 0 34" fill="none" stroke="rgba(9, 50, 50, .12)" stroke-width="1" />
+                </pattern>
+              </defs>
+              <rect width="680" height="360" fill="url(#chartGrid)" />
+              <path class="coastline" d="M0 252 C76 210 123 255 185 218 C258 174 315 227 372 184 C438 134 487 170 546 126 C596 88 635 100 680 76 L680 360 L0 360 Z" />
+              <path class="breakwater" d="M74 246 L205 213 L333 218 L456 166 L612 130" />
+              <path class="route-path sunset" d="M140 238 C218 148 316 91 474 72" />
+              <path class="route-path culture" d="M152 249 C235 235 315 192 394 159" />
+              <path class="route-path food" d="M145 260 C206 298 323 306 455 276" />
+              <path class="route-path night" d="M184 230 C280 214 364 113 565 104" />
+              <g id="chartMarkers"></g>
+            </svg>
+          </div>
+
+          <div id="routeList" class="route-list" aria-live="polite"></div>
+        </section>
+
+        <aside class="detail-panel" aria-label="目前航線詳情">
+          <div class="panel-head">
+            <div>
+              <p>Selected berth</p>
+              <h2>航線調度牌</h2>
+            </div>
+          </div>
+          <article id="routeDetail" class="route-detail"></article>
+        </aside>
+
+        <section class="panel captain-panel">
+          <div class="panel-head">
+            <div>
+              <p>Captain desk</p>
+              <h2>船長排班</h2>
+            </div>
+          </div>
+          <div id="captainList" class="captain-list"></div>
+        </section>
+
+        <section class="panel booking-panel">
+          <div class="panel-head">
+            <div>
+              <p>Booking queue</p>
+              <h2>預約需求</h2>
+            </div>
+          </div>
+          <form id="bookingForm" class="booking-form">
+            <label>
+              <span>旅客/團體</span>
+              <input name="guest" placeholder="例如：港邊小旅行 6 人" required>
+            </label>
+            <label>
+              <span>航線</span>
+              <select name="route" id="routeSelect"></select>
+            </label>
+            <label>
+              <span>人數</span>
+              <input name="people" type="number" min="1" max="12" value="4">
+            </label>
+            <button type="submit">送進調度池</button>
+          </form>
+          <div id="bookingList" class="booking-list"></div>
+        </section>
+
+        <section class="panel impact-panel">
+          <div class="panel-head">
+            <div>
+              <p>Local impact</p>
+              <h2>地方成效</h2>
+            </div>
+          </div>
+          <div id="impactList" class="impact-list"></div>
+        </section>
+
+        <section class="panel log-panel">
+          <div class="panel-head">
+            <div>
+              <p>Harbor log</p>
+              <h2>營運紀錄</h2>
+            </div>
+          </div>
+          <ol id="logList" class="log-list"></ol>
+        </section>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
