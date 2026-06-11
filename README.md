@@ -1,5 +1,21 @@
 # 船長帶路-智慧平台 demo
 
+## 快速看懂
+
+![startup-captain-guide-platform 功能截圖](docs/preview.png)
+
+- 線上 Demo：https://atlasforcn.github.io/startup-captain-guide-platform/
+- 這個原型在做什麼：把船長帶路做成港灣體驗預約與營運中控台，串接行程、船長、旅客與安全檢核。
+- 特色定位：特色是把地方體驗服務做成可派班、可預約、可追蹤的營運系統。
+- 操作流程：選擇港灣體驗與船長時段 → 查看預約、天候與安全檢查 → 用中控台追蹤出航進度與旅客回饋
+
+<details>
+<summary>展開完整功能流程截圖</summary>
+
+![startup-captain-guide-platform 完整功能流程截圖](docs/flow.png)
+
+</details>
+
 這個 repo 是依據官方公開得獎資訊，為 `船長帶路-智慧平台` 製作的原生 HTML/CSS/JS 互動 demo。原型把作品概念延伸為「基隆港灣營運中控台」：把船長、航線、天候、預約需求與地方合作店家串成同一個營運畫面。
 
 ## 比賽來源
