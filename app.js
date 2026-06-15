@@ -216,19 +216,21 @@ function renderRoutes() {
       if (!route) return;
 
       const seatsLeft = availableSeats(route);
+      const people = seatsLeft ? Math.min(2, seatsLeft) : 1;
+      const state = seatsLeft ? "待付款" : "候補";
       bookings.unshift({
-        guest: seatsLeft ? "碼頭現場客" : "候補旅客",
+        guest: state === "待付款" ? "碼頭現場客" : "候補旅客",
         route: route.name,
-        people: seatsLeft ? 2 : 1,
-        state: seatsLeft ? "待付款" : "候補",
+        people,
+        state,
       });
 
-      if (seatsLeft) {
-        route.booked = Math.min(route.seats, route.booked + 2);
+      if (state === "待付款") {
+        route.booked += people;
       }
 
       selectedRouteId = route.id;
-      addLog(seatsLeft ? "快速預約進線" : "候補需求進線", `${route.name} 新增 ${seatsLeft ? 2 : 1} 人需求。`);
+      addLog(state === "待付款" ? "快速預約進線" : "候補需求進線", `${route.name} 新增 ${people} 人需求。`);
       renderAll();
     });
   });
@@ -422,8 +424,8 @@ bookingForm.addEventListener("submit", (event) => {
     state,
   });
 
-  if (route && seatsLeft) {
-    route.booked = Math.min(route.seats, route.booked + people);
+  if (route && state === "待付款") {
+    route.booked += people;
     selectedRouteId = route.id;
   }
 
